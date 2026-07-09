@@ -4,12 +4,12 @@ Sistema de gerenciamento financeiro pessoal desenvolvido em Java, via linha de c
 
 ## Funcionalidades
 
-- ➕ Adicionar receita
-- ➖ Adicionar despesa
-- 📋 Listar todas as transações
-- 💰 Consultar saldo atual
-- 🔍 Buscar transações por categoria
-- 🗑️ Remover transação por ID
+- Adicionar receita
+- Adicionar despesa
+- Listar todas as transações
+- Consultar saldo atual
+- Buscar transações por categoria
+- Remover transação por ID
 
 ## Categorias disponíveis
 
