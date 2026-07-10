@@ -15,6 +15,22 @@ public class Transacao {
         proximoId++;
 
     }
+
+    @Override
+public String toString() {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("----------------------------------------\n");
+    sb.append("ID         : ").append(id).append("\n");
+    sb.append("Descrição  : ").append(descricao).append("\n");
+    sb.append("Categoria  : ").append(categoria).append("\n");
+    sb.append("Tipo       : ").append(tipo).append("\n");
+    sb.append("Valor      : R$ ").append(String.format("%.2f", valor)).append("\n");
+    sb.append("----------------------------------------");
+
+    return sb.toString();
+}
+
     public Categoria getCategoria() {
         return categoria;
     }

@@ -22,11 +22,7 @@ public class SistemaFinanceiro {
 
      public void listarTransacoes(){
         for(Transacao transacao : transacoes){
-            System.out.println(transacao.getId());
-            System.out.println(transacao.getCategoria());
-            System.out.println(transacao.getValor());
-            System.out.println(transacao.getTipo());
-            System.out.println(transacao.getDescricao());
+            System.out.println(transacao);
         }
      }
 
@@ -46,11 +42,7 @@ public class SistemaFinanceiro {
     public void buscarPorCategoria(Categoria categoria){
         for(Transacao transacao : transacoes){
             if(transacao.getCategoria() == categoria){
-                System.out.println(transacao.getId());
-                System.out.println(transacao.getCategoria());
-                System.out.println(transacao.getValor());
-                System.out.println(transacao.getTipo());
-                System.out.println(transacao.getDescricao());
+                System.out.println(transacao);
             }
         }
     }
