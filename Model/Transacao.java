@@ -1,4 +1,4 @@
-public class Transacao {
+public class Transacao{
     private int id;
     private Categoria categoria;
     private double valor;

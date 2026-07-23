@@ -8,7 +8,7 @@ public class SistemaFinanceiro {
         transacoes.add(t);
      }
 
-    public Transacao removerTransacao(int id) {
+    public Transacao removerTransacao(int id){
         for(int i = 0; i < transacoes.size(); i++){
             if(id == transacoes.get(i).getId()){
                 Transacao removida = transacoes.get(i);
@@ -21,6 +21,11 @@ public class SistemaFinanceiro {
         }
 
      public void listarTransacoes(){
+        if (transacoes.isEmpty()) {
+            System.out.println("Nenhuma transação cadastrada.");
+            return;
+        }
+        
         for(Transacao transacao : transacoes){
             System.out.println(transacao);
         }
@@ -40,10 +45,41 @@ public class SistemaFinanceiro {
     }
 
     public void buscarPorCategoria(Categoria categoria){
+        boolean encontrou = false;
         for(Transacao transacao : transacoes){
             if(transacao.getCategoria() == categoria){
                 System.out.println(transacao);
+                encontrou = true;
+            }
+
+            if (!encontrou) {
+                System.out.println("Nenhuma transação encontrada.");
             }
         }
+    }
+
+    public Transacao buscarPorId(int id) throws TransacaoNaoEncontradaException {
+    for (Transacao transacao : transacoes) {
+        if (transacao.getId() == id) {
+            return transacao;
+        }
+    }
+
+    throw new TransacaoNaoEncontradaException("Nenhuma transação encontrada.");
+}
+
+    public void buscarPorDescricao(String descricao){
+        boolean encontrou = false;
+        String pesquisa = descricao.toLowerCase();
+        for(Transacao transacao : transacoes){
+            if(transacao.getDescricao().toLowerCase().contains(pesquisa)){
+                System.out.println(transacao);
+                encontrou = true;
+            }
+        }
+
+        if (!encontrou) {
+                System.out.println("Nenhuma transação encontrada.");
+            }
     }
 }

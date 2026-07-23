@@ -11,8 +11,10 @@ public class Main {
                 System.out.println("3 - Listar transações");
                 System.out.println("4 - Ver saldo atual");
                 System.out.println("5 - Buscar por categoria");
-                System.out.println("6 - Remover transação");
-                System.out.println("7 - Sair");
+                System.out.println("6 - Buscar por ID");
+                System.out.println("7 - Buscar por descrição");
+                System.out.println("8 - Remover transação");
+                System.out.println("9 - Sair");
                 System.out.println("Escolha uma opção:");
                 opcao = scanner.nextInt();
 
@@ -34,13 +36,19 @@ public class Main {
                                         buscarPorCategoria(scanner, sistemaFinanceiro);
                                         break;
                                         case 6:
-                                            removerTransacao(scanner, sistemaFinanceiro);
+                                            buscarPorId(scanner, sistemaFinanceiro);
                                             break;
                                             case 7:
-                                                scanner.close();
+                                                buscarPorDescricao(scanner, sistemaFinanceiro);
                                                 break;
+                                                case 8:
+                                                    removerTransacao(scanner, sistemaFinanceiro);
+                                                    break;
+                                                    case 9:
+                                                        scanner.close();
+                                                        break;
                 }
-            } while (opcao != 7);
+            } while (opcao != 9);
 
 
         }
@@ -96,6 +104,34 @@ public class Main {
             } catch (IllegalArgumentException e) {
                 // Esse erro acontece se o usuário digitar algo que não está no Enum (ex: "FESTA")
                 System.out.println("Erro: A categoria '" + entradaUsuario + "' não existe no sistema.");                          
+            }
+        }
+
+        public static void buscarPorId(Scanner scanner, SistemaFinanceiro sistemaFinanceiro){
+            int entradaUsuario;
+            System.out.println("Digite o Id:");
+            scanner.nextInt();
+            entradaUsuario = scanner.nextInt();
+            try{
+                sistemaFinanceiro.buscarPorId(entradaUsuario);
+            } catch (TransacaoNaoEncontradaException e) {
+                // Esse erro acontece se o usuário digitar algo que não está no Enum (ex: "FESTA")
+                System.out.println("Erro: O ID '" + entradaUsuario + "' não existe no sistema.");                          
+            }
+        }
+
+        public static void buscarPorDescricao(Scanner scanner, SistemaFinanceiro sistemaFinanceiro){
+            String entradaUsuario;
+            String textoFormatado;
+            System.out.println("Digite a descrição:");
+            scanner.nextLine();
+            entradaUsuario = scanner.nextLine();
+            try{
+                textoFormatado = entradaUsuario.trim().toUpperCase();
+                sistemaFinanceiro.buscarPorDescricao(textoFormatado);
+            } catch (IllegalArgumentException e) {
+                // Esse erro acontece se o usuário digitar algo que não está no Enum (ex: "FESTA")
+                System.out.println("Erro: A descrição '" + entradaUsuario + "' não existe no sistema.");                          
             }
         }
 
