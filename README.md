@@ -1,68 +1,85 @@
 # MyFinance
 
-Sistema de gerenciamento financeiro pessoal desenvolvido em Java, via linha de comando (console). Permite registrar receitas e despesas, organizá-las por categoria e acompanhar o saldo atual.
+Sistema financeiro desenvolvido em Java para gerenciamento de receitas e despesas.
+
+O projeto começou como uma aplicação Java utilizando armazenamento em memória e evoluiu para utilizar **MySQL** como banco de dados, com acesso realizado através de **JDBC** e organização da persistência utilizando o padrão **DAO (Data Access Object)**.
 
 ## Funcionalidades
 
-- Adicionar receita
-- Adicionar despesa
-- Listar todas as transações
-- Consultar saldo atual
-- Buscar transações por categoria
-- Remover transação por ID
-
-## Categorias disponíveis
-
-- Alimentação
-- Transporte
-- Lazer
-- Estudos
-
-## Estrutura do projeto
-
-```
-MyFinance/
-├── Application/
-│   └── Main.java              # Ponto de entrada e menu interativo
-├── Model/
-│   ├── Categoria.java          # Enum com as categorias de transação
-│   ├── TipoTransacao.java      # Enum: RECEITA ou DESPESA
-│   └── Transacao.java          # Classe que representa uma transação
-├── Service/
-│   └── SistemaFinanceiro.java  # Regras de negócio (adicionar, remover, listar, calcular saldo)
-└── Util/
-```
+* Adicionar receitas
+* Adicionar despesas
+* Listar transações
+* Calcular saldo
+* Buscar transação por ID
+* Buscar transações por categoria
+* Buscar transações por descrição
+* Atualizar transações
+* Remover transações
+* Persistência dos dados em banco de dados MySQL
 
 ## Tecnologias utilizadas
 
-- Java
-- Coleções (ArrayList)
-- Programação orientada a objetos (POO)
+* Java
+* MySQL
+* JDBC
+* Git / GitHub
+* Visual Studio Code
+* MySQL Workbench
 
-## Como executar
+## Estrutura do projeto
 
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/MyFinance.git
-   ```
-2. Compile o projeto:
-   ```bash
-   javac Application/Main.java Model/*.java Service/*.java -d out
-   ```
-3. Execute:
-   ```bash
-   java -cp out Main
-   ```
+```text
+MyFinance/
+│
+├── Application/
+│   └── Main.java
+│
+├── DAO/
+│   └── TransacaoDAO.java
+│
+├── Model/
+│   ├── Categoria.java
+│   ├── TipoTransacao.java
+│   ├── Transacao.java
+│   └── TransacaoNaoEncontradaException.java
+│
+├── Service/
+│   └── SistemaFinanceiro.java
+│
+└── Util/
+    └── ConnectionFactory.java
+```
 
-Ao rodar, um menu interativo será exibido no console para adicionar transações, listar, consultar saldo e mais.
+## Banco de dados
 
-## Melhorias futuras
+O sistema utiliza um banco de dados MySQL para armazenar as transações.
 
-- [ ] Persistência de dados (salvar em arquivo ou banco de dados)
-- [ ] Interface gráfica
-- [ ] Relatórios por período
-- [ ] Testes unitários
+A tabela `transacao` possui informações como:
 
-## Autor
+* `id`
+* `categoria`
+* `valor`
+* `tipo`
+* `descricao`
 
-Desenvolvido como projeto de estudos em Java.
+## Arquitetura
+
+O projeto utiliza uma separação básica de responsabilidades:
+
+```text
+Main
+ ↓
+SistemaFinanceiro
+ ↓
+TransacaoDAO
+ ↓
+MySQL
+```
+
+O `Main` é responsável pela interação com o usuário, o `SistemaFinanceiro` concentra as regras da aplicação e o `TransacaoDAO` é responsável pela comunicação com o banco de dados.
+
+## Objetivo
+
+Este projeto está sendo desenvolvido como forma de prática dos conhecimentos adquiridos em Java, com foco em **Programação Orientada a Objetos, JDBC, SQL, tratamento de exceções e persistência de dados**.
+
+O projeto continuará sendo evoluído conforme novos conhecimentos forem adquiridos.

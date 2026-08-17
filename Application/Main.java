@@ -1,20 +1,28 @@
 import java.util.Scanner;
+import Model.Transacao;
+import Model.Categoria;
+import Model.TipoTransacao;
+import Model.TransacaoNaoEncontradaException;
+import Service.SistemaFinanceiro;
+
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws TransacaoNaoEncontradaException {
         Scanner scanner = new Scanner(System.in);
         SistemaFinanceiro sistemaFinanceiro = new SistemaFinanceiro();
         int opcao;
+
             do{
                 System.out.println("1 - Adicionar receita");
                 System.out.println("2 - Adicionar despesa");
-                System.out.println("3 - Listar transações");
-                System.out.println("4 - Ver saldo atual");
-                System.out.println("5 - Buscar por categoria");
-                System.out.println("6 - Buscar por ID");
-                System.out.println("7 - Buscar por descrição");
-                System.out.println("8 - Remover transação");
-                System.out.println("9 - Sair");
+                System.out.println("3 - Atualizar despesa");
+                System.out.println("4 - Listar transações");
+                System.out.println("5 - Ver saldo atual");
+                System.out.println("6 - Buscar por categoria");
+                System.out.println("7 - Buscar por ID");
+                System.out.println("8 - Buscar por descrição");
+                System.out.println("9 - Remover transação");
+                System.out.println("0 - Sair");
                 System.out.println("Escolha uma opção:");
                 opcao = scanner.nextInt();
 
@@ -22,34 +30,36 @@ public class Main {
                     case 1:
                         adicionarTransacao(scanner, sistemaFinanceiro, TipoTransacao.RECEITA);
                         break;
-                        case 2:
-                            adicionarTransacao(scanner, sistemaFinanceiro, TipoTransacao.DESPESA);
-                            break;
-                            case 3:
-                                sistemaFinanceiro.listarTransacoes();
-                                break;
-                                case 4:
-                                    double saldo = sistemaFinanceiro.calcularSaldo();
-                                    System.out.println("Seu saldo é de: " + saldo);
-                                    break;
-                                    case 5:
-                                        buscarPorCategoria(scanner, sistemaFinanceiro);
-                                        break;
-                                        case 6:
-                                            buscarPorId(scanner, sistemaFinanceiro);
-                                            break;
-                                            case 7:
-                                                buscarPorDescricao(scanner, sistemaFinanceiro);
-                                                break;
-                                                case 8:
-                                                    removerTransacao(scanner, sistemaFinanceiro);
-                                                    break;
-                                                    case 9:
-                                                        scanner.close();
-                                                        break;
+                    case 2:
+                        adicionarTransacao(scanner, sistemaFinanceiro, TipoTransacao.DESPESA);
+                        break;
+                    case 3:
+                        atualizarTransacao(scanner, sistemaFinanceiro);
+                        break;
+                    case 4:
+                        sistemaFinanceiro.listarTransacoes();
+                        break;
+                    case 5:
+                        double saldo = sistemaFinanceiro.calcularSaldo();
+                        System.out.println("Seu saldo é de: " + saldo);
+                        break;
+                    case 6:
+                        buscarPorCategoria(scanner, sistemaFinanceiro);
+                        break;
+                    case 7:
+                        buscarPorId(scanner, sistemaFinanceiro);
+                        break;
+                    case 8:
+                        buscarPorDescricao(scanner, sistemaFinanceiro);
+                        break;
+                    case 9:
+                        removerTransacao(scanner, sistemaFinanceiro);
+                        break;
+                    case 0:
+                        scanner.close();
+                        break;
                 }
-            } while (opcao != 9);
-
+            } while (opcao != 0);
 
         }
 
@@ -90,6 +100,64 @@ public class Main {
             }
         }
 
+        public static void atualizarTransacao(Scanner scanner, SistemaFinanceiro sistemaFinanceiro) {
+
+    System.out.println("Digite o ID da transação que deseja atualizar:");
+    int id = scanner.nextInt();
+    scanner.nextLine();
+
+    System.out.println("Digite o novo valor:");
+    double valor = scanner.nextDouble();
+    scanner.nextLine();
+
+    System.out.println(
+        "Digite a nova categoria " +
+        "(ALIMENTACAO, TRANSPORTE, LAZER, ESTUDOS):"
+    );
+
+    String entradaUsuario = scanner.nextLine();
+
+    Categoria categoria;
+
+    try {
+        categoria = Categoria.valueOf(
+            entradaUsuario.trim().toUpperCase()
+        );
+    } catch (IllegalArgumentException e) {
+        System.out.println("Categoria inválida.");
+        return;
+    }
+
+    System.out.println("Digite o novo tipo (RECEITA ou DESPESA):");
+    TipoTransacao tipo;
+
+    try {
+        tipo = TipoTransacao.valueOf(
+            scanner.nextLine().trim().toUpperCase()
+        );
+    } catch (IllegalArgumentException e) {
+        System.out.println("Tipo de transação inválido.");
+        return;
+    }
+
+    System.out.println("Digite a nova descrição:");
+    String descricao = scanner.nextLine();
+
+    try {
+
+        sistemaFinanceiro.atualizarTransacao(
+            id,
+            valor,
+            categoria,
+            tipo,
+            descricao
+        );
+
+    } catch (TransacaoNaoEncontradaException e) {
+        System.out.println(e.getMessage());
+    }
+}
+
         public static void buscarPorCategoria(Scanner scanner, SistemaFinanceiro sistemaFinanceiro){
             Categoria categoria;
             String entradaUsuario;
@@ -101,7 +169,7 @@ public class Main {
                 textoFormatado = entradaUsuario.trim().toUpperCase();
                 categoria = Categoria.valueOf(textoFormatado);
                 sistemaFinanceiro.buscarPorCategoria(categoria);
-            } catch (IllegalArgumentException e) {
+            } catch (TransacaoNaoEncontradaException e) {
                 // Esse erro acontece se o usuário digitar algo que não está no Enum (ex: "FESTA")
                 System.out.println("Erro: A categoria '" + entradaUsuario + "' não existe no sistema.");                          
             }
@@ -120,7 +188,7 @@ public class Main {
             }
         }
 
-        public static void buscarPorDescricao(Scanner scanner, SistemaFinanceiro sistemaFinanceiro){
+        public static void buscarPorDescricao(Scanner scanner, SistemaFinanceiro sistemaFinanceiro) throws TransacaoNaoEncontradaException{
             String entradaUsuario;
             String textoFormatado;
             System.out.println("Digite a descrição:");

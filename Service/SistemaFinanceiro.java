@@ -1,26 +1,57 @@
-import java.util.ArrayList;
+package Service;
+
+import Model.Transacao;
+import Model.Categoria;
+import Model.TipoTransacao;
+import Model.TransacaoNaoEncontradaException;
+
+import java.util.List;
+
+import DAO.TransacaoDAO;
 
 public class SistemaFinanceiro {
-    private ArrayList<Transacao> transacoes = new ArrayList<>();
+    private TransacaoDAO transacaoDAO = new TransacaoDAO();
     
      public void adicionarTransacao(double valor, Categoria categoria, TipoTransacao tipo, String descricao){
         Transacao t = new Transacao(categoria, valor, tipo, descricao);
-        transacoes.add(t);
+        transacaoDAO.salvar(t);
      }
 
-    public Transacao removerTransacao(int id){
-        for(int i = 0; i < transacoes.size(); i++){
-            if(id == transacoes.get(i).getId()){
-                Transacao removida = transacoes.get(i);
-                transacoes.remove(i);
-                return removida;
-            }
-        }
-        System.out.println("Transação inexistente");
-        return null;
+    public void atualizarTransacao(int id, double valor, Categoria categoria,
+        TipoTransacao tipo, String descricao)
+        throws TransacaoNaoEncontradaException {
+
+        Transacao transacao = transacaoDAO.buscarPorId(id);
+
+        if (transacao == null) {
+            throw new TransacaoNaoEncontradaException("Nenhuma transação encontrada com o ID: " + id);
         }
 
+        Transacao atualizada = new Transacao(
+                id,
+                categoria,
+                valor,
+                tipo,
+                descricao
+        );
+
+        transacaoDAO.atualizar(atualizada);
+    }
+
+    public Transacao removerTransacao(int id) {
+
+        Transacao removida = transacaoDAO.buscarPorId(id);
+
+        if (removida != null) {
+            transacaoDAO.deletar(id);
+            return removida;
+        }
+
+        return null;
+    }
+
      public void listarTransacoes(){
+        List<Transacao> transacoes = transacaoDAO.listar();
         if (transacoes.isEmpty()) {
             System.out.println("Nenhuma transação cadastrada.");
             return;
@@ -32,6 +63,7 @@ public class SistemaFinanceiro {
      }
 
      public double calcularSaldo(){
+        List<Transacao> transacoes = transacaoDAO.listar();
         double saldo = 0;
         
         for(Transacao transacao : transacoes){
@@ -44,42 +76,47 @@ public class SistemaFinanceiro {
         return saldo;
     }
 
-    public void buscarPorCategoria(Categoria categoria){
-        boolean encontrou = false;
-        for(Transacao transacao : transacoes){
-            if(transacao.getCategoria() == categoria){
-                System.out.println(transacao);
-                encontrou = true;
-            }
+    public List<Transacao> buscarPorCategoria(Categoria categoria)
+            throws TransacaoNaoEncontradaException {
 
-            if (!encontrou) {
-                System.out.println("Nenhuma transação encontrada.");
-            }
+        List<Transacao> transacoes =
+                transacaoDAO.buscarPorCategoria(categoria);
+
+        if (transacoes.isEmpty()) {
+            throw new TransacaoNaoEncontradaException(
+                    "Nenhuma transação encontrada com a categoria: " + categoria
+            );
         }
+
+        return transacoes;
     }
 
     public Transacao buscarPorId(int id) throws TransacaoNaoEncontradaException {
-    for (Transacao transacao : transacoes) {
-        if (transacao.getId() == id) {
-            return transacao;
-        }
+        Transacao transacao = transacaoDAO.buscarPorId(id);
+
+        if (transacao == null) {
+            throw new TransacaoNaoEncontradaException(
+            "Nenhuma transação encontrada com o ID: " + id
+        );
+
+        }   
+        System.out.println(transacao);
+        return transacao;
     }
 
-    throw new TransacaoNaoEncontradaException("Nenhuma transação encontrada.");
-}
+    public List<Transacao> buscarPorDescricao(String descricao)
+            throws TransacaoNaoEncontradaException {
 
-    public void buscarPorDescricao(String descricao){
-        boolean encontrou = false;
-        String pesquisa = descricao.toLowerCase();
-        for(Transacao transacao : transacoes){
-            if(transacao.getDescricao().toLowerCase().contains(pesquisa)){
-                System.out.println(transacao);
-                encontrou = true;
-            }
+        List<Transacao> transacoes =
+                transacaoDAO.buscarPorDescricao(descricao);
+
+        if (transacoes.isEmpty()) {
+            throw new TransacaoNaoEncontradaException(
+                    "Nenhuma transação encontrada para: " + descricao
+            );
         }
 
-        if (!encontrou) {
-                System.out.println("Nenhuma transação encontrada.");
-            }
+        return transacoes;
     }
+
 }

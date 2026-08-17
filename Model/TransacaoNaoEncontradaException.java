@@ -1,3 +1,5 @@
+package Model;
+
 public class TransacaoNaoEncontradaException extends Exception{
     
     public TransacaoNaoEncontradaException(){

@@ -1,3 +1,5 @@
+package Model;
+
 public class Transacao{
     private int id;
     private Categoria categoria;
@@ -14,6 +16,16 @@ public class Transacao{
         this.descricao = descricao;
         proximoId++;
 
+    }
+
+    public Transacao(int id, Categoria categoria, double valor,
+                 TipoTransacao tipo, String descricao) {
+
+    this.id = id;
+    this.categoria = categoria;
+    this.valor = valor;
+    this.tipo = tipo;
+    this.descricao = descricao;
     }
 
     @Override
