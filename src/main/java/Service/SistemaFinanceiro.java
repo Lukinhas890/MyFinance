@@ -21,7 +21,7 @@ public class SistemaFinanceiro {
         TipoTransacao tipo, String descricao)
         throws TransacaoNaoEncontradaException {
 
-        Transacao transacao = transacaoDAO.buscarPorId(id);
+        Transacao transacao = transacaoDAO.buscarPorId(id).orElse(null);
 
         if (transacao == null) {
             throw new TransacaoNaoEncontradaException("Nenhuma transação encontrada com o ID: " + id);
@@ -40,7 +40,7 @@ public class SistemaFinanceiro {
 
     public Transacao removerTransacao(int id) {
 
-        Transacao removida = transacaoDAO.buscarPorId(id);
+        Transacao removida = transacaoDAO.buscarPorId(id).orElse(null);
 
         if (removida != null) {
             transacaoDAO.deletar(id);
@@ -92,7 +92,7 @@ public class SistemaFinanceiro {
     }
 
     public Transacao buscarPorId(int id) throws TransacaoNaoEncontradaException {
-        Transacao transacao = transacaoDAO.buscarPorId(id);
+        Transacao transacao = transacaoDAO.buscarPorId(id).orElse(null);
 
         if (transacao == null) {
             throw new TransacaoNaoEncontradaException(

@@ -6,16 +6,12 @@ public class Transacao{
     private double valor;
     private TipoTransacao tipo;
     private String descricao;
-    private static int proximoId = 1;
 
     public Transacao(Categoria categoria, double valor, TipoTransacao tipo, String descricao) {
-        this.id = proximoId;
         this.categoria = categoria;
         this.valor = valor;
         this.tipo = tipo;
         this.descricao = descricao;
-        proximoId++;
-
     }
 
     public Transacao(int id, Categoria categoria, double valor,
@@ -63,6 +59,8 @@ public String toString() {
         return id;
     }
 
-    
+    public void setId(int id) {
+        this.id = id;
+    }
 
 }
